@@ -1,0 +1,101 @@
+<div class="container mt-5">
+  <h3>
+    <i class="fas fa-poll-h mr-2"></i> Test scores
+  </h3>
+  <div class="col-sm-12 table-responsive mt-5">
+    <table class="table" *ngIf="!isLoading && resultList.length > 0">
+      <thead>
+        <tr>
+          <th>#</th>
+          <th>Marks</th>
+          <th>Correct Answers</th>
+          <th>Incorrect Answers</th>
+          <th *ngIf="role === 'Admin'">User</th>
+          <th>Details</th>
+          <th>Test Date</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let result of resultList; let i = index;">
+          <td>{{ i + 1 }}</td>
+          <td>{{ result.score}}</td>
+          <td>{{ result.correctAnswers}}</td>
+          <td>{{ result.incorrectAnswers }}</td>
+          <td *ngIf="role === 'Admin'">{{ result['user'] }}</td>
+          <td>
+            <button class="btn btn-outline-info" type="button" (click)="showDetails(result.score, result.answerList);"
+              data-toggle="modal" data-target="#exampleModal">
+              View
+            </button>
+          </td>
+          <td>{{ result.created_on | date:'medium' }}</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <div class="d-flex justify-content-center mt-5" *ngIf="isLoading">
+      <div class="spinner-border text-primary" role="status">
+        <span class="sr-only">Loading...</span>
+      </div>
+    </div>
+
+    <h4 class="text-info" *ngIf="!isLoading && resultList.length <= 0">No Scores available.</h4>
+
+
+  </div>
+</div>
+
+
+
+<!-- Modal -->
+<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+  aria-hidden="true">
+  <div class="modal-dialog modal-xl" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Result Details</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <div class="row" *ngFor="let item of detailView; let in = index;">
+          <div class="col-sm-12 table-responsive mt-4">
+            <table class="table table-borderless">
+              <tr>
+                <th>
+                  Question #{{ in + 1 }}
+                  <i class="fa fa-check-circle-o ml-2 text-success" *ngIf="item.selectedAnswer === item.question.correctAnswer"></i>
+                  <i class="fas fa-times ml-2 text-danger" *ngIf="item.selectedAnswer !== item.question.correctAnswer"></i>
+                </th>
+              </tr>
+              <tr>
+                <th>{{ item.question.question }} <span class="ml-5 text-info">( {{item.question.marks}} marks )</span></th>
+              </tr>
+            </table>
+
+            <table class="table table-borderless">
+              <tr>
+                <th *ngFor="let op of item.question.options; let i = index;">
+                  Option {{ i + 1 }}
+                </th>
+                <th>Your Choice</th>
+              </tr>
+              <tr>
+                <td *ngFor="let op of item.question.options"
+                  [ngClass]="{'text-success font-weight-bold': op === item.question.correctAnswer}">
+                  {{op}}
+                </td>
+                <th [ngClass]="{'text-success font-weight-bold': item.selectedAnswer === item.question.correctAnswer,
+                                'text-danger font-weight-bold': item.selectedAnswer !== item.question.correctAnswer}">
+                  {{ item.selectedAnswer }}
+                </th>
+              </tr>
+            </table>
+            <hr>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

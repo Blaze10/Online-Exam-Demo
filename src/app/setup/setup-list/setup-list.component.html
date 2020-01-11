@@ -1,0 +1,58 @@
+<div class="container mt-5">
+ <div class="row">
+  <div class="col-md-6 col-sm-12">
+    <h3>
+      <i class="fas fa-cog mr-2"></i> Setup questions
+    </h3>
+  </div>
+
+  <div class="col-md-6 col-sm-12 text-right">
+    <button class="btn btn-primary" type="button" routerLink='/setup/setup-create'>
+       <i class="fa fa-plus mr-2"></i> Add Question
+    </button>
+  </div>
+ </div>
+  <div class="row">
+
+    <div class="col-sm-12 table-responsive mt-3">
+      <table class="table" *ngIf="!isLoading">
+        <thead>
+          <tr>
+            <th>#</th>
+            <th>Question</th>
+            <th>Marks</th>
+            <th>Option count</th>
+            <th>Created on</th>
+            <th>Modify</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let question of questionsList; let i = index;">
+            <td>{{ i + 1 }}</td>
+            <td>{{ question.question.length > 50 ? question.question.substring(0, 50) + ' ...' : question.question }}</td>
+            <td>{{ question.marks }}</td>
+            <td>{{ question.options.length }}</td>
+            <td>{{ question.created_on | date }}</td>
+            <td>
+              <button class="btn btn-link mr-2" type="button" routerLink="/setup/setup-edit/{{question.id}}">
+                <i class="fa fa-edit text-primary"></i>
+              </button>
+
+              <button class="btn btn-link mr-2" type="button" (click)="deleteQuestion(question.id)">
+                <i class="fa fa-trash-o text-danger"></i>
+              </button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+
+      <div class="d-flex justify-content-center mt-5" *ngIf="isLoading">
+        <div class="spinner-border text-primary" role="status">
+          <span class="sr-only">Loading...</span>
+        </div>
+      </div>
+
+
+    </div>
+  </div>
+</div>
