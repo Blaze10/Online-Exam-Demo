@@ -4,10 +4,10 @@ const User = require('../models/user');
 
 // User login
 exports.signup  = (req, res, next) => {
-  bcrypt.hash(req.body.password, 10)
+  bcrypt.hash(req.body.password.trim(), 10)
     .then(hashedPassword => {
       const user = new User({
-        email: req.body.email,
+        email: req.body.email.trim().toLowerCase(),
         password: hashedPassword,
         fullName: req.body.fullName,
       });
@@ -37,13 +37,13 @@ exports.signup  = (req, res, next) => {
 // User signup
 exports.login = (req, res, next) => {
   let fetchedUser;
-  User.findOne({ email: req.body.email })
+  User.findOne({ email: req.body.email.trim().toLowerCase() })
     .then((user) => {
       if (!user) {
         return res.status(401).json({ message: 'Authentication failed.' });
       }
       fetchedUser = user;
-      return bcrypt.compare(req.body.password, user.password);
+      return bcrypt.compare(req.body.password, user.password.trim());
     })
     .then((result) => {
       if (!result) {
@@ -51,7 +51,7 @@ exports.login = (req, res, next) => {
       }
       const token = jwt.sign(
         { email: fetchedUser.email, userId: fetchedUser._id, role: fetchedUser.role },
-        'Super_Secret_Long_Protection_String_For_Hasing',
+        process.env.JWT_KEY,
         { expiresIn: '1h' }
       );
       res.status(200).json({

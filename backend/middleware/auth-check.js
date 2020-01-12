@@ -3,7 +3,7 @@ const jwt = require('jsonwebtoken');
 module.exports = (req, res, next) => {
   try {
     const authToken = req.headers.authorization.split(' ')[1];
-    const decodedToken = jwt.verify(authToken, 'Super_Secret_Long_Protection_String_For_Hasing');
+    const decodedToken = jwt.verify(authToken, process.env.JWT_KEY);
     if (!decodedToken) {
       return res.status(401).json({
         message: 'Authentication Required'

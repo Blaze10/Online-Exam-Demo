@@ -8,7 +8,7 @@ const resultRoutes = require('./routes/result');
 
 const app = express();
 
-mongoose.connect('mongodb+srv://blz:mrunal12@cluster0-nslbx.mongodb.net/online-exam?retryWrites=true&w=majority',
+mongoose.connect('mongodb+srv://blz:'+process.env.MONGO_ATLAS_PW+'@cluster0-nslbx.mongodb.net/online-exam?retryWrites=true&w=majority',
  {useNewUrlParser: true, useUnifiedTopology: true})
  .then(() => {
    console.log('Connected to db');
