@@ -1,7 +1,7 @@
 
 {
   "env": {
-    "MONGO_ATLAS_PW": "mrunal12",
-    "JWT_KEY": "Super_Secret_Long_Protection_String_For_Hasing"
+    "MONGO_ATLAS_PW": "YOUR_MONGODB_PASSWORD",
+    "JWT_KEY": "YOUR_JWT_SECRET_KEY"
   }
 }
